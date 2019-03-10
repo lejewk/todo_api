@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/todos")
@@ -32,20 +33,22 @@ public class TodoController {
     @RequestMapping(path = "/{id}", method = RequestMethod.DELETE)
     public ResponseEntity<Void> delete(@PathVariable(value = "id") Long id) {
         todoRepository.deleteById(id);
-        return new ResponseEntity<Void>(HttpStatus.OK);
+        return ResponseEntity.ok().build();
     }
 
     @RequestMapping(path = "/{id}", method = RequestMethod.PUT)
     public ResponseEntity<Todo> update(@PathVariable(value = "id") Long id, @RequestBody Todo requestTodo) {
-        Todo todo = todoRepository.findById(id).orElse(null);
+        Optional<Todo> todo = todoRepository.findById(id);
 
-        if (todo == null) {
-            return new ResponseEntity<Todo>(HttpStatus.NOT_FOUND);
+        if (!todo.isPresent()) {
+            return ResponseEntity.notFound().build();
         }
 
-        todo.setTodo(requestTodo.getTodo());
-        todoRepository.save(todo);
+        todo.ifPresent(it -> {
+            it.setTodo(requestTodo.getTodo());
+            todoRepository.save(it);
+        });
 
-        return new ResponseEntity<Todo>(todo, HttpStatus.OK);
+        return ResponseEntity.noContent().build();
     }
 }
