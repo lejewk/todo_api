@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Optional;
 
+@CrossOrigin
 @RestController
 @RequestMapping("/todos")
 public class TodoController {
@@ -24,8 +25,8 @@ public class TodoController {
     }
 
     @RequestMapping(method = RequestMethod.POST)
-    public ResponseEntity<Todo> create(@RequestParam(value = "todoTitle") String todoTitle) {
-        Todo todo = new Todo(todoTitle);
+    public ResponseEntity<Todo> create(@RequestParam(value = "title") String title) {
+        Todo todo = new Todo(title);
         todoRepository.save(todo);
         return new ResponseEntity(todo, HttpStatus.CREATED);
     }
@@ -45,7 +46,7 @@ public class TodoController {
         }
 
         todo.ifPresent(it -> {
-            it.setTodo(requestTodo.getTodo());
+            it.setTitle(requestTodo.getTitle());
             todoRepository.save(it);
         });
 

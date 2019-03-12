@@ -13,7 +13,7 @@ public class Todo {
 
     @Lob
     @Column(nullable = false)
-    private String todo;
+    private String title;
 
     @CreationTimestamp
     @Temporal(TemporalType.TIMESTAMP)
@@ -26,8 +26,8 @@ public class Todo {
     public Todo() {
     }
 
-    public Todo(String todo) {
-        this.todo = todo;
+    public Todo(String title) {
+        this.title = title;
     }
 
     public Long getId() {
@@ -38,12 +38,12 @@ public class Todo {
         this.id = id;
     }
 
-    public String getTodo() {
-        return todo;
+    public String getTitle() {
+        return title;
     }
 
-    public void setTodo(String todo) {
-        this.todo = todo;
+    public void setTitle(String title) {
+        this.title = title;
     }
 
     public Date getDateCreated() {
